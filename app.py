@@ -408,10 +408,10 @@ if menu == "🏠 Portfolio":
         st.markdown('<div class="section-header">🛠 Tech Stack & Expertise</div>', unsafe_allow_html=True)
         
         tech_stack = {
-            "Languages": ["Python", "JavaScript", "C++"],
+            "Languages": ["Python", "JavaScript", "C++", "HTML/CSS"],
             "AI/ML": ["TensorFlow", "PyTorch", "Scikit-learn"],
             "Web Dev": ["Streamlit", "React", "Tailwind CSS"],
-            "Design": ["Figma", "Adobe XD", "Framer"]
+            "Design": ["Figma", "Canva"]
         }
         
         for category, techs in tech_stack.items():
