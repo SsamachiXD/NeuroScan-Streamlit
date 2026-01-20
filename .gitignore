@@ -1,12 +1,5 @@
-# Abaikan folder cache Python (tidak berguna)
 __pycache__/
-*.py[cod]
-
-# Abaikan file sistem operasi
+*.pyc
 .DS_Store
-Thumbs.db
-
-# Abaikan folder environment (jika ada)
 venv/
-env/
 .env
