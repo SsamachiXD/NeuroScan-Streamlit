@@ -14,102 +14,97 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# --- 2. MODERN CSS WITH DARK THEME UPDATES ---
+# --- 2. MODERN CSS (DARK THEME FIXED) ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
     
     html, body, [class*="css"] {
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); /* Background Utama Gelap */
+        color: #f8fafc;
     }
 
-    /* Glassmorphism Cards (Global) */
+    /* Glassmorphism Cards (Versi Gelap Default) */
     .glass-card {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
+        background: rgba(15, 23, 42, 0.7); /* Gelap Transparan */
+        backdrop-filter: blur(12px);
         border-radius: 24px;
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
         padding: 2rem;
         transition: all 0.3s ease;
     }
     
     .glass-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.25);
+        box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
+        border-color: rgba(255, 255, 255, 0.2);
     }
+
+    /* Memaksa teks dalam card menjadi putih */
+    .glass-card h1, .glass-card h2, .glass-card h3, .glass-card h4, 
+    .glass-card p, .glass-card li, .glass-card span, .glass-card div {
+        color: #f1f5f9 !important;
+    }
+    .glass-card strong { color: #818cf8 !important; }
 
     /* Gradient Text */
     .gradient-text {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
         font-weight: 900;
         font-size: 3.5rem;
         line-height: 1.2;
-        animation: gradientShift 3s ease infinite;
-    }
-
-    @keyframes gradientShift {
-        0%, 100% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
     }
 
     /* Modern Tech Badges */
     .tech-badge-modern {
         display: inline-flex;
         align-items: center;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
+        background: rgba(255, 255, 255, 0.1);
+        color: #e2e8f0;
         padding: 8px 16px;
         margin: 6px 4px;
         border-radius: 12px;
         font-size: 0.875rem;
         font-weight: 600;
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        border: 1px solid rgba(255,255,255,0.1);
         transition: all 0.3s ease;
         animation: fadeInUp 0.6s ease forwards;
-        opacity: 0;
     }
 
     .tech-badge-modern:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+        background: rgba(255, 255, 255, 0.2);
     }
 
     @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 
     /* Social Links */
     .social-link {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
+        display: inline-flex; align-items: center; gap: 8px;
         padding: 12px 24px;
-        background: white;
+        background: rgba(255,255,255,0.05);
         border-radius: 12px;
         text-decoration: none;
-        color: #1e293b;
+        color: #f8fafc !important;
         font-weight: 600;
         transition: all 0.3s ease;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         margin: 8px;
+        border: 1px solid rgba(255,255,255,0.05);
     }
 
     .social-link:hover {
         transform: translateY(-3px);
-        box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-        color: #667eea;
+        background: rgba(255,255,255,0.15);
+        color: #818cf8 !important;
     }
 
     /* Profile Image */
@@ -117,8 +112,9 @@ st.markdown("""
         position: relative;
         border-radius: 24px;
         overflow: hidden;
-        box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 20px 60px rgba(99, 102, 241, 0.3);
         animation: float 6s ease-in-out infinite;
+        border: 4px solid rgba(255,255,255,0.1);
     }
 
     @keyframes float {
@@ -126,31 +122,32 @@ st.markdown("""
         50% { transform: translateY(-20px); }
     }
 
-    /* --- UPDATE: STATS CARD (DARK MODE) --- */
+    /* Stats Card (GELAP) */
     .stat-card {
-        background: rgba(15, 23, 42, 0.85); /* Ubah ke Gelap */
+        background: rgba(15, 23, 42, 0.8);
         padding: 1.5rem;
         border-radius: 16px;
         text-align: center;
-        border: 1px solid rgba(255,255,255,0.2); /* Border putih tipis */
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        border: 1px solid rgba(255,255,255,0.1);
         transition: all 0.3s ease;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
 
     .stat-card:hover {
         transform: scale(1.05);
-        background: rgba(30, 41, 59, 0.95);
-        border-color: rgba(255,255,255,0.4);
+        border-color: rgba(255,255,255,0.3);
+        background: rgba(30, 41, 59, 0.9);
     }
 
     .stat-number {
         font-size: 2.5rem;
         font-weight: 900;
-        /* Gradient text tetap dipertahankan agar kontras */
-        background: linear-gradient(135deg, #a5b4fc 0%, #e0e7ff 100%); 
+        background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
+    
+    .stat-label { color: #cbd5e1; font-weight: 600; }
 
     /* Result Card */
     .result-card {
@@ -167,47 +164,38 @@ st.markdown("""
 
     /* Button Override */
     div.stButton > button {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        border: none;
-        padding: 0.75rem 2rem;
-        font-weight: 700;
-        border-radius: 12px;
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        color: white; border: none; padding: 0.75rem 2rem;
+        font-weight: 700; border-radius: 12px;
         transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        font-size: 1rem;
-        letter-spacing: 0.5px;
+        box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
     }
-
     div.stButton > button:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
     }
 
-    /* Input Styling */
+    /* Input Styling (Agar tetap terang & mudah diisi) */
     .stTextInput > div > div > input {
         border-radius: 12px;
-        border: 2px solid #e2e8f0;
+        border: 2px solid rgba(255,255,255,0.2);
         padding: 0.75rem;
-        transition: all 0.3s ease;
+        background-color: rgba(255,255,255,0.9) !important;
+        color: #0f172a !important;
     }
-
     .stTextInput > div > div > input:focus {
-        border-color: #667eea;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        border-color: #818cf8;
+        background-color: #ffffff !important;
     }
-
-    /* --- UPDATE: SIDEBAR STYLING (DARK MODE) --- */
+    
+    /* Sidebar Styling (GELAP) */
     [data-testid="stSidebar"] {
-        background: #0f172a; /* Warna Background Gelap */
+        background: #020617; /* Very Dark Blue */
         border-right: 1px solid rgba(255,255,255,0.1);
     }
     
-    /* Memaksa teks di sidebar menjadi putih/terang */
-    [data-testid="stSidebar"] p, 
-    [data-testid="stSidebar"] span, 
-    [data-testid="stSidebar"] div,
-    [data-testid="stSidebar"] label {
+    /* Memaksa teks sidebar jadi terang */
+    [data-testid="stSidebar"] p, [data-testid="stSidebar"] span, [data-testid="stSidebar"] div, [data-testid="stSidebar"] label {
         color: #e2e8f0 !important;
     }
 
@@ -217,11 +205,28 @@ st.markdown("""
     .section-header {
         font-size: 1.75rem;
         font-weight: 800;
-        color: #1e293b;
+        color: #f1f5f9;
         margin-bottom: 1rem;
         position: relative;
         padding-left: 1rem;
-        border-left: 4px solid #667eea;
+        border-left: 4px solid #818cf8;
+    }
+    
+    /* Info Box Dark Style */
+    .info-box-dark {
+        padding: 1.5rem; 
+        background: rgba(15, 23, 42, 0.6); 
+        border-radius: 16px; 
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        border: 1px solid rgba(255,255,255,0.1);
+        transition: all 0.3s ease;
+        text-align: center;
+        height: 100%;
+    }
+    .info-box-dark:hover {
+        transform: translateY(-5px);
+        background: rgba(30, 41, 59, 0.8);
+        border-color: rgba(255,255,255,0.3);
     }
     </style>
 """, unsafe_allow_html=True)
@@ -287,7 +292,7 @@ def create_pdf(patient_name, diagnosis, confidence, probabilities):
     
     return pdf.output(dest='S').encode('latin-1')
 
-# --- 4. MODERN SIDEBAR ---
+# --- 4. MODERN SIDEBAR (DARK) ---
 with st.sidebar:
     st.markdown("""
     <div style="text-align: center; padding: 1rem 0;">
@@ -313,7 +318,7 @@ with st.sidebar:
     st.markdown("---")
     
     st.markdown("""
-    <div style="padding: 1rem; background: rgba(15, 23, 42, 0.85); border-radius: 12px; margin-top: 1rem; border: 1px solid rgba(255,255,255,0.1);">
+    <div style="padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 12px; margin-top: 1rem; border: 1px solid rgba(255,255,255,0.1);">
         <p style="font-size: 0.75rem; color: #cbd5e1; margin: 0; text-align: center;">
             <strong>Developer:</strong> Rahmat Ardiansyah<br>
             <strong>NIM:</strong> 220405010<br>
@@ -336,39 +341,39 @@ if menu == "🏠 Portfolio":
             st.image("rahmat1.png", use_container_width=True)
         else:
             st.markdown("""
-            <div style="aspect-ratio: 1; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            <div style="aspect-ratio: 1; background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); 
                         display: flex; align-items: center; justify-content: center; border-radius: 24px;">
                 <span style="font-size: 6rem;">👨‍💻</span>
             </div>
             """, unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
         
-        # Stats Cards (Sekarang sudah gelap sesuai CSS .stat-card)
+        # Stats Cards (GELAP)
         st.markdown("<br>", unsafe_allow_html=True)
         stat_col1, stat_col2 = st.columns(2)
         with stat_col1:
             st.markdown("""
             <div class="stat-card">
                 <div class="stat-number">4</div>
-                <div style="color: #e2e8f0; font-weight: 600;">Classes</div>
+                <div class="stat-label">Classes</div>
             </div>
             """, unsafe_allow_html=True)
         with stat_col2:
             st.markdown("""
             <div class="stat-card">
                 <div class="stat-number">95%</div>
-                <div style="color: #e2e8f0; font-weight: 600;">Accuracy</div>
+                <div class="stat-label">Accuracy</div>
             </div>
             """, unsafe_allow_html=True)
 
     with col2:
         st.markdown("""
         <div style="animation: fadeInUp 0.8s ease;">
-            <p style="color: #667eea; font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem;">
+            <p style="color: #818cf8; font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem;">
                 👋 Hello, I'm
             </p>
             <h1 class="gradient-text">Rahmat Ardiansyah</h1>
-            <p style="color: #475569; font-size: 1.25rem; line-height: 1.8; margin-top: 1rem;">
+            <p style="color: #cbd5e1; font-size: 1.25rem; line-height: 1.8; margin-top: 1rem;">
                 Mahasiswa <strong>Teknik Informatika</strong> di <strong>Universitas Muhammadiyah Riau</strong> 
                 dengan passion dalam <strong>UI/UX Design</strong> dan <strong>Artificial Intelligence</strong>. 
                 Menggabungkan estetika desain dengan kecerdasan buatan untuk menciptakan solusi inovatif.
@@ -378,36 +383,32 @@ if menu == "🏠 Portfolio":
         
         st.markdown("<br>", unsafe_allow_html=True)
         
-        # Info Grid (Diupdate menjadi warna GELAP)
+        # Info Grid (GELAP)
         info_col1, info_col2, info_col3 = st.columns(3)
-        
-        # Style Box Gelap Reusable
-        dark_box_style = "padding: 1rem; background: rgba(15, 23, 42, 0.85); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1);"
-        
         with info_col1:
-            st.markdown(f"""
-            <div style="{dark_box_style}">
+            st.markdown("""
+            <div class="info-box-dark">
                 <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">📍</div>
-                <div style="font-weight: 700; color: #ffffff;">Pekanbaru</div>
-                <div style="color: #cbd5e1; font-size: 0.875rem;">Riau, Indonesia</div>
+                <div style="font-weight: 700; color: #f1f5f9;">Pekanbaru</div>
+                <div style="color: #94a3b8; font-size: 0.875rem;">Riau, Indonesia</div>
             </div>
             """, unsafe_allow_html=True)
         
         with info_col2:
-            st.markdown(f"""
-            <div style="{dark_box_style}">
+            st.markdown("""
+            <div class="info-box-dark">
                 <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🎓</div>
-                <div style="font-weight: 700; color: #ffffff;">UMRI</div>
-                <div style="color: #cbd5e1; font-size: 0.875rem;">Angkatan 2022</div>
+                <div style="font-weight: 700; color: #f1f5f9;">UMRI</div>
+                <div style="color: #94a3b8; font-size: 0.875rem;">Angkatan 2022</div>
             </div>
             """, unsafe_allow_html=True)
         
         with info_col3:
-            st.markdown(f"""
-            <div style="{dark_box_style}">
+            st.markdown("""
+            <div class="info-box-dark">
                 <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">💼</div>
-                <div style="font-weight: 700; color: #ffffff;">220405010</div>
-                <div style="color: #cbd5e1; font-size: 0.875rem;">NIM</div>
+                <div style="font-weight: 700; color: #f1f5f9;">220405010</div>
+                <div style="color: #94a3b8; font-size: 0.875rem;">NIM</div>
             </div>
             """, unsafe_allow_html=True)
 
@@ -422,7 +423,7 @@ if menu == "🏠 Portfolio":
         }
         
         for category, techs in tech_stack.items():
-            st.markdown(f"<p style='color: #64748b; font-weight: 600; margin-top: 1rem; margin-bottom: 0.5rem;'>{category}</p>", unsafe_allow_html=True)
+            st.markdown(f"<p style='color: #cbd5e1; font-weight: 600; margin-top: 1rem; margin-bottom: 0.5rem;'>{category}</p>", unsafe_allow_html=True)
             badges_html = "".join([
                 f'<span class="tech-badge-modern" style="animation-delay: {i*0.1}s;">{tech}</span>' 
                 for i, tech in enumerate(techs)
@@ -460,7 +461,7 @@ elif menu == "🔬 AI Dashboard":
     st.markdown("""
     <div style="text-align: center; margin-bottom: 2rem;">
         <h1 class="gradient-text" style="font-size: 3rem;">NeuroScan AI Dashboard</h1>
-        <p style="color: #64748b; font-size: 1.1rem; max-width: 800px; margin: 1rem auto;">
+        <p style="color: #cbd5e1; font-size: 1.1rem; max-width: 800px; margin: 1rem auto;">
             Sistem Pendukung Keputusan Klinis berbasis <strong>Deep Learning VGG16</strong> 
             untuk deteksi dini tumor otak melalui analisis citra MRI.
         </p>
@@ -470,8 +471,10 @@ elif menu == "🔬 AI Dashboard":
     c_left, c_right = st.columns([1, 1.3], gap="large")
     
     with c_left:
+        # Gunakan card transparan gelap
         st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-        # HEADER INPUT DATA DIHAPUS (Sesuai Permintaan)
+        
+        # HEADER "INPUT DATA PASIEN" SUDAH DIHAPUS DISINI
         
         p_name = st.text_input("Nama Lengkap Pasien", placeholder="contoh: Dr. Budi Santoso")
         uploaded_file = st.file_uploader(
@@ -600,7 +603,7 @@ elif menu == "🔬 AI Dashboard":
                         st.markdown("#### 📋 Laporan Medis Digital")
                         
                         st.markdown(f"""
-                        <div style="background: rgba(15, 23, 42, 0.85); padding: 1.5rem; border-radius: 12px; border: 2px solid #e2e8f0;">
+                        <div style="background: white; padding: 1.5rem; border-radius: 12px; border: 2px solid #e2e8f0;">
                             <h4 style="margin-top: 0;">EXECUTIVE SUMMARY</h4>
                             <table style="width: 100%; border-collapse: collapse;">
                                 <tr>
@@ -655,7 +658,7 @@ elif menu == "📊 About Project":
     
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # Project Overview
+    # Project Overview (GELAP)
     st.markdown('<div class="glass-card">', unsafe_allow_html=True)
     st.markdown("### 🎯 Overview Proyek")
     
@@ -687,7 +690,7 @@ elif menu == "📊 About Project":
     
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # Technical Architecture
+    # Technical Architecture (GELAP)
     st.markdown('<div class="glass-card">', unsafe_allow_html=True)
     st.markdown("### 🏗️ Arsitektur Sistem")
     
@@ -710,35 +713,35 @@ elif menu == "📊 About Project":
     
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # Developer Info
+    # Developer Info (GELAP)
     col_dev1, col_dev2, col_dev3 = st.columns(3)
     
     with col_dev1:
         st.markdown("""
-        <div class="glass-card" style="text-align: center;">
+        <div class="info-box-dark">
             <div style="font-size: 2.5rem; margin-bottom: 1rem;">👨‍💻</div>
             <h4>Developer</h4>
-            <p style="font-weight: 700; color: #667eea;">Rahmat Ardiansyah</p>
-            <p style="color: #64748b; font-size: 0.875rem;">Teknik Informatika UMRI</p>
+            <p style="font-weight: 700; color: #818cf8;">Rahmat Ardiansyah</p>
+            <p style="color: #94a3b8; font-size: 0.875rem;">Teknik Informatika UMRI</p>
         </div>
         """, unsafe_allow_html=True)
     
     with col_dev2:
         st.markdown("""
-        <div class="glass-card" style="text-align: center;">
+        <div class="info-box-dark">
             <div style="font-size: 2.5rem; margin-bottom: 1rem;">🎓</div>
             <h4>NIM</h4>
-            <p style="font-weight: 700; color: #667eea;">220405010</p>
-            <p style="color: #64748b; font-size: 0.875rem;">Angkatan 2022</p>
+            <p style="font-weight: 700; color: #818cf8;">220405010</p>
+            <p style="color: #94a3b8; font-size: 0.875rem;">Angkatan 2022</p>
         </div>
         """, unsafe_allow_html=True)
 
     with col_dev3:
         st.markdown("""
-        <div class="glass-card" style="text-align: center;">
+        <div class="info-box-dark">
             <div style="font-size: 2.5rem; margin-bottom: 1rem;">📧</div>
             <h4>Contact</h4>
-            <p style="font-weight: 700; color: #667eea;">220401050@student.umri.ac.id</p>
-            <p style="color: #64748b; font-size: 0.875rem;">Pekanbaru, Riau</p>
+            <p style="font-weight: 700; color: #818cf8;">rahmat@student.umri.ac.id</p>
+            <p style="color: #94a3b8; font-size: 0.875rem;">Pekanbaru, Riau</p>
         </div>
         """, unsafe_allow_html=True)
