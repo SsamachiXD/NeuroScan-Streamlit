@@ -7,10 +7,10 @@ from fpdf import FPDF
 import base64
 import time
 import os
-import tempfile  # Tambahan untuk handle gambar PDF
+import tempfile
 
 # ==========================================
-# 1. KONFIGURASI HALAMAN & MODERN CSS
+# 1. KONFIGURASI HALAMAN & FIX CSS
 # ==========================================
 st.set_page_config(
     page_title="NeuroScan AI | Rahmat Ardiansyah",
@@ -19,67 +19,68 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# CSS INJECTION: MERUBAH TOTAL TAMPILAN DEFAULT STREAMLIT
+# CSS INJECTION: MEMAKSA WARNA TEKS TETAP GELAP (ANTI-DARK MODE CONFLICT)
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
-    html, body, [class*="css"] {
+    /* Global Text & Background */
+    html, body, [class*="css"], .stApp {
         font-family: 'Plus Jakarta Sans', sans-serif;
+        background-color: #f8fafc !important;
+        color: #1e293b !important; /* Warna teks utama gelap */
     }
 
-    /* Background Utama: Clean Clinical Look */
-    .stApp {
-        background-color: #f8fafc;
+    /* Memastikan teks markdown, judul, dan label berwarna gelap */
+    .stMarkdown, p, span, label, h1, h2, h3, h4 {
+        color: #1e293b !important;
     }
 
     /* Sidebar Styling */
     section[data-testid="stSidebar"] {
-        background-color: #ffffff;
+        background-color: #ffffff !important;
         border-right: 1px solid #e2e8f0;
     }
+    
+    section[data-testid="stSidebar"] .stMarkdown, 
+    section[data-testid="stSidebar"] span, 
+    section[data-testid="stSidebar"] label {
+        color: #1e293b !important;
+    }
 
-    /* Card Container Styling */
+    /* Card Container */
     .metric-card {
-        background-color: white;
+        background-color: white !important;
         border: 1px solid #e2e8f0;
         border-radius: 12px;
         padding: 20px;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         margin-bottom: 20px;
+        color: #1e293b !important;
     }
 
-    /* Custom Headers */
-    h1, h2, h3 {
-        color: #0f172a;
-        font-weight: 700;
-        letter-spacing: -0.025em;
-    }
-    
-    /* Styling Tombol Utama */
+    /* Button Styling */
     div.stButton > button {
-        background-color: #0ea5e9;
-        color: white;
+        background-color: #0ea5e9 !important;
+        color: white !important;
         border: none;
         padding: 0.75rem 1.5rem;
         font-weight: 600;
         border-radius: 8px;
-        transition: all 0.2s;
         box-shadow: 0 4px 6px -1px rgba(14, 165, 233, 0.4);
     }
     div.stButton > button:hover {
-        background-color: #0284c7;
-        box-shadow: 0 10px 15px -3px rgba(14, 165, 233, 0.5);
+        background-color: #0284c7 !important;
         transform: translateY(-2px);
     }
 
-    /* Alert Boxes Customization */
-    div[data-baseweb="notification"] {
-        border-radius: 8px;
-        border: 1px solid rgba(0,0,0,0.1);
+    /* Form Inputs */
+    .stTextInput input {
+        color: #1e293b !important;
+        background-color: white !important;
     }
 
-    /* Hapus elemen default */
+    /* Hide default elements */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
@@ -87,17 +88,15 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ==========================================
-# 2. BACKEND LOGIC (OPTIMIZED)
+# 2. LOGIKA BACKEND
 # ==========================================
 
 @st.cache_resource
 def load_model_ai():
-    # Pastikan nama file sesuai dengan yang Anda upload ke folder project
     model_path = 'VGG16_medium.h5'
     if not os.path.exists(model_path):
         return None
     try:
-        # Load model dengan compile=False agar lebih aman dari warning optimizer
         model = tf.keras.models.load_model(model_path, compile=False)
         return model
     except Exception as e:
@@ -108,7 +107,7 @@ def create_clinical_pdf(patient_name, diagnosis, confidence, img_obj):
     pdf = FPDF()
     pdf.add_page()
     
-    # Modern Header
+    # Header Laporan
     pdf.set_fill_color(240, 249, 255)
     pdf.rect(0, 0, 210, 40, 'F')
     pdf.set_y(10)
@@ -121,244 +120,131 @@ def create_clinical_pdf(patient_name, diagnosis, confidence, img_obj):
     pdf.cell(0, 8, txt="Laporan Analisis Radiologi Digital", ln=True, align='C')
     pdf.ln(20)
     
-    # Patient Info Box
-    pdf.set_fill_color(255, 255, 255)
-    pdf.set_draw_color(226, 232, 240)
-    pdf.set_line_width(0.5)
-    
+    # Data Pasien
     pdf.set_font("Arial", 'B', 11)
     pdf.set_text_color(15, 23, 42)
     pdf.cell(0, 10, txt="DATA PASIEN", ln=True)
-    
     pdf.set_font("Arial", size=11)
     pdf.cell(50, 10, txt="Nama Pasien", border='B')
     pdf.cell(0, 10, txt=f": {patient_name}", border='B', ln=True)
     pdf.cell(50, 10, txt="Waktu Scan", border='B')
     pdf.cell(0, 10, txt=f": {time.strftime('%d-%m-%Y %H:%M WIB')}", border='B', ln=True)
-    pdf.cell(50, 10, txt="ID Referensi", border='B')
-    pdf.cell(0, 10, txt=f": REF-{int(time.time())}", border='B', ln=True)
-    
     pdf.ln(10)
     
-    # --- HANDLING GAMBAR UNTUK PDF ---
-    # Simpan gambar sementara agar bisa dibaca FPDF
+    # Preview Citra di PDF
     try:
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".jpg") as tmp_file:
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".jpg") as tmp:
             img = Image.open(img_obj).convert('RGB')
-            img.save(tmp_file.name)
-            # Tampilkan gambar di PDF (x=80 agar di tengah)
-            pdf.image(tmp_file.name, x=80, w=50)
+            img.save(tmp.name)
+            pdf.image(tmp.name, x=75, w=60)
             pdf.ln(5)
-    except Exception as e:
-        pdf.cell(0, 10, txt="[Gambar tidak dapat dimuat]", ln=True, align='C')
+    except:
+        pdf.cell(0, 10, txt="[Gambar MRI]", ln=True, align='C')
 
-    # Result Section
+    # Hasil
     pdf.set_font("Arial", 'B', 14)
-    if diagnosis == "No Tumor":
-        pdf.set_text_color(34, 197, 94) # Green
-    else:
-        pdf.set_text_color(239, 68, 68) # Red
-        
-    pdf.cell(0, 15, txt=f"HASIL DIAGNOSIS: {diagnosis.upper()}", ln=True, border=1, align='C')
+    color = (34, 197, 94) if diagnosis == "No Tumor" else (239, 68, 68)
+    pdf.set_text_color(*color)
+    pdf.cell(0, 15, txt=f"DIAGNOSIS: {diagnosis.upper()}", ln=True, border=1, align='C')
     
     pdf.set_text_color(0, 0, 0)
     pdf.set_font("Arial", size=11)
     pdf.ln(5)
-    pdf.cell(0, 8, txt=f"Tingkat Kepercayaan Model: {confidence:.2f}%", ln=True)
-    pdf.cell(0, 8, txt="Model AI: VGG16 (Convolutional Neural Network)", ln=True)
+    pdf.cell(0, 8, txt=f"Tingkat Kepercayaan: {confidence:.2f}%", ln=True)
     
-    # Disclaimer
-    pdf.set_y(-40)
+    pdf.set_y(-30)
     pdf.set_font("Arial", 'I', 8)
     pdf.set_text_color(148, 163, 184)
-    pdf.multi_cell(0, 5, txt="PENAFIAN: Dokumen ini dihasilkan oleh sistem kecerdasan buatan (AI) sebagai alat pendukung keputusan klinis. Hasil ini BUKAN diagnosis medis final. Wajib dikonsultasikan dengan dokter spesialis radiologi atau neurologi.")
+    pdf.multi_cell(0, 5, txt="Penafian: Hasil AI adalah pendukung keputusan, bukan diagnosis medis final.")
     
     return pdf.output(dest='S').encode('latin-1')
 
-# Load Resources
 model = load_model_ai()
 class_names = ['Glioma Tumor', 'Meningioma Tumor', 'No Tumor', 'Pituitary Tumor']
 
 # ==========================================
-# 3. PAGE UI COMPONENTS
+# 3. KOMPONEN UI
 # ==========================================
-
-def render_header():
-    st.markdown("""
-        <div style='margin-bottom: 2rem;'>
-            <h1 style='font-size: 2.5rem; margin-bottom: 0;'>NeuroScan AI</h1>
-            <p style='color: #64748b; font-size: 1.1rem;'>
-                Clinical Decision Support System for Brain Tumor Detection
-            </p>
-            <div style='height: 4px; width: 60px; background-color: #0ea5e9; border-radius: 2px; margin-top: 10px;'></div>
-        </div>
-    """, unsafe_allow_html=True)
 
 def show_portfolio():
     st.markdown("## 👨‍💻 Developer Profile")
-    
-    col_profile, col_details = st.columns([1, 3], gap="medium")
-    
-    with col_profile:
-        # Gunakan foto default jika link mati
+    col1, col2 = st.columns([1, 3], gap="medium")
+    with col1:
         st.image("https://cdn-icons-png.flaticon.com/512/3135/3135715.png", width=180)
-        st.markdown("""
-            <div style='text-align: center; margin-top: 10px;'>
-                <h3 style='margin:0;'>Rahmat Ardiansyah</h3>
-                <p style='color:#64748b; font-size: 0.9em;'>AI Enthusiast</p>
-            </div>
-        """, unsafe_allow_html=True)
-    
-    with col_details:
-        st.markdown("""
+    with col2:
+        st.markdown(f"""
         <div class="metric-card">
-            <h4 style="color:#0ea5e9; margin-top:0;">Summary</h4>
-            <p style="color:#334155; line-height: 1.6;">
-                Mahasiswa tingkat akhir Teknik Informatika <b>Universitas Muhammadiyah Riau (UMRI)</b>. 
-                Berfokus pada implementasi Deep Learning dalam bidang kesehatan (Health-Tech). 
-                Memiliki passion dalam menerjemahkan data kompleks menjadi solusi yang dapat ditindaklanjuti.
-            </p>
-            <hr style="border-top: 1px solid #e2e8f0;">
-            <div style="display: flex; justify-content: space-between; margin-top: 15px;">
-                <div>📍 <b>Lokasi:</b> Pekanbaru, Riau</div>
-                <div>🎓 <b>Status:</b> Mahasiswa (2022)</div>
-                <div>💼 <b>Minat:</b> AI, Computer Vision, Python</div>
-            </div>
+            <h4>Rahmat Ardiansyah</h4>
+            <p>Mahasiswa Teknik Informatika <b>Universitas Muhammadiyah Riau (UMRI)</b>.</p>
+            <hr>
+            <p>NIM: 220405010<br>Minat: Deep Learning & UI/UX Design</p>
         </div>
         """, unsafe_allow_html=True)
-
-    # Tech Stack Grid
-    st.markdown("### 🛠️ Technology Stack")
-    c1, c2, c3, c4 = st.columns(4)
-    with c1: st.button("Python", disabled=True, use_container_width=True)
-    with c2: st.button("TensorFlow", disabled=True, use_container_width=True)
-    with c3: st.button("Streamlit", disabled=True, use_container_width=True)
-    with c4: st.button("Computer Vision", disabled=True, use_container_width=True)
 
 def show_system():
-    render_header()
+    st.markdown("<h1>NeuroScan AI System</h1>", unsafe_allow_html=True)
     
     if model is None:
-        st.error("⚠️ **System Error:** File Model (VGG16_medium.h5) tidak ditemukan. Pastikan file sudah di-upload satu folder dengan app.py.")
+        st.error("Model tidak ditemukan.")
         return
 
-    col_control, col_display = st.columns([1, 1.5], gap="large")
+    col_ctrl, col_res = st.columns([1, 1.5], gap="large")
 
-    # --- LEFT PANEL: CONTROL ---
-    with col_control:
-        st.markdown("### 1. Upload Data")
+    with col_ctrl:
+        st.subheader("1. Input Data")
         with st.container(border=True):
-            patient_name = st.text_input("Nama Pasien", placeholder="Masukkan nama lengkap...")
-            uploaded_file = st.file_uploader("Upload Citra MRI", type=["jpg", "png", "jpeg"])
-            
-            if uploaded_file:
-                st.info("✅ Citra berhasil dimuat. Siap analisis.")
-            
-            analyze_trigger = st.button("🚀 JALANKAN ANALISIS", type="primary", use_container_width=True)
+            name = st.text_input("Nama Pasien", placeholder="Nama lengkap...")
+            file = st.file_uploader("Upload MRI", type=["jpg", "png", "jpeg"])
+            btn = st.button("🔍 ANALISIS SEKARANG", type="primary", use_container_width=True)
 
-        st.markdown("### 📝 Catatan Sistem")
-        st.markdown("""
-        <div style='background-color: #f1f5f9; padding: 15px; border-radius: 8px; font-size: 0.85rem; color: #475569;'>
-        <ul>
-            <li>Pastikan citra MRI jelas dan tidak buram.</li>
-            <li>Format yang didukung: JPG, PNG.</li>
-            <li>Sistem menggunakan model VGG16 dengan akurasi teruji.</li>
-        </ul>
-        </div>
-        """, unsafe_allow_html=True)
-
-    # --- RIGHT PANEL: DISPLAY & RESULTS ---
-    with col_display:
-        st.markdown("### 2. Visualization & Results")
-        
-        if not uploaded_file:
-            st.markdown("""
-            <div style='border: 2px dashed #cbd5e1; border-radius: 12px; padding: 40px; text-align: center; color: #94a3b8;'>
-                <h3 style='color: #cbd5e1;'>Menunggu Input</h3>
-                <p>Silakan upload citra MRI pada panel sebelah kiri untuk melihat hasil analisis.</p>
-            </div>
-            """, unsafe_allow_html=True)
-        
-        else:
-            # Tampilkan Gambar
-            image = Image.open(uploaded_file).convert('RGB')
-            st.image(image, caption="Citra Input (MRI Scan)", use_container_width=True)
+    with col_res:
+        st.subheader("2. Hasil Analisis")
+        if file:
+            img = Image.open(file).convert('RGB')
+            st.image(img, caption="Citra Input", use_container_width=True)
             
-            if analyze_trigger:
-                if not patient_name:
-                    st.warning("⚠️ Mohon isi Nama Pasien terlebih dahulu.")
+            if btn:
+                if not name:
+                    st.warning("Isi nama pasien.")
                 else:
-                    with st.spinner('Sedang memproses neuron network...'):
-                        time.sleep(1.5) # Efek dramatis loading
+                    with st.spinner('Menganalisis...'):
+                        # Resize 150x150 sesuai training data
+                        proc_img = ImageOps.fit(img, (150, 150), Image.Resampling.LANCZOS)
+                        arr = np.asarray(proc_img) / 255.0
+                        arr = np.expand_dims(arr, axis=0)
                         
-                        # --- PERBAIKAN PENTING: RESIZE KE 150x150 (SESUAI TRAINING) ---
-                        # VGG16 Training Anda menggunakan 150x150. Jangan pakai 256.
-                        target_size = (150, 150)
-                        img_processed = ImageOps.fit(image, target_size, Image.Resampling.LANCZOS)
+                        pred = model.predict(arr)
+                        score = tf.nn.softmax(pred[0])
+                        idx = np.argmax(score)
                         
-                        img_array = np.asarray(img_processed) / 255.0
-                        img_array = np.expand_dims(img_array, axis=0)
+                        diag = class_names[idx]
+                        conf = 100 * np.max(score)
                         
-                        # Prediction
-                        prediction = model.predict(img_array)
-                        score = tf.nn.softmax(prediction[0])
-                        class_idx = np.argmax(score)
-                        diagnosis = class_names[class_idx]
-                        confidence = 100 * np.max(score)
-                        
-                        # --- RESULT CARD (Modern UI) ---
-                        st.markdown("---")
-                        
-                        # Warna Status
-                        status_color = "#22c55e" if diagnosis == "No Tumor" else "#ef4444" 
-                        status_text_color = "#ffffff"
-                        
+                        color = "#22c55e" if diag == "No Tumor" else "#ef4444"
                         st.markdown(f"""
-                        <div style="background-color: {status_color}; padding: 20px; border-radius: 10px; margin-bottom: 20px; text-align: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
-                            <h2 style="color: {status_text_color}; margin:0;">{diagnosis}</h2>
-                            <p style="color: {status_text_color}; margin:0; opacity: 0.9; font-size: 1.1rem;">Confidence Score: <b>{confidence:.2f}%</b></p>
+                        <div style="background-color:{color}; padding:20px; border-radius:10px; color:white; text-align:center;">
+                            <h2 style="color:white !important;">{diag}</h2>
+                            <p style="color:white !important;">Confidence Score: {conf:.2f}%</p>
                         </div>
                         """, unsafe_allow_html=True)
-
-                        # Grafik Probabilitas
-                        st.markdown("#### Detail Probabilitas")
-                        probs = prediction[0] * 100
-                        df_chart = pd.DataFrame({"Kondisi": class_names, "Probabilitas": probs})
-                        st.bar_chart(df_chart.set_index("Kondisi"), color="#0ea5e9")
                         
-                        # Tombol Download PDF
-                        # Kita kirim ulang uploaded_file ke fungsi PDF
-                        pdf_bytes = create_clinical_pdf(patient_name, diagnosis, confidence, uploaded_file)
-                        b64_pdf = base64.b64encode(pdf_bytes).decode('utf-8')
+                        st.bar_chart(pd.DataFrame(pred[0]*100, index=class_names, columns=["%"]))
                         
-                        href = f'<a href="data:application/octet-stream;base64,{b64_pdf}" download="NeuroScan_Report_{patient_name}.pdf" style="text-decoration:none;">'
-                        href += f'<div style="background-color:#1e293b; color:white; padding:12px; border-radius:8px; text-align:center; font-weight:bold; margin-top:10px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">📄 DOWNLOAD PDF REPORT</div></a>'
-                        st.markdown(href, unsafe_allow_html=True)
+                        pdf = create_clinical_pdf(name, diag, conf, file)
+                        b64 = base64.b64encode(pdf).decode('utf-8')
+                        st.markdown(f'<a href="data:application/octet-stream;base64,{b64}" download="Laporan_{name}.pdf"><button style="width:100%; padding:10px; background:#1e293b; color:white; border-radius:8px; border:none; cursor:pointer;">📄 DOWNLOAD PDF</button></a>', unsafe_allow_html=True)
+        else:
+            st.info("Upload citra MRI untuk memulai.")
 
 # ==========================================
-# 4. MAIN APP ROUTER
+# 4. ROUTER
 # ==========================================
 
 def main():
-    # Sidebar Navigation Custom
     with st.sidebar:
         st.markdown("## 🏥 Menu")
-        page = st.radio(
-            "",
-            ["NeuroScan System", "Developer Profile"],
-            index=0,
-            label_visibility="collapsed"
-        )
-        
-        st.markdown("---")
-        st.caption(f"© 2026 NeuroScan AI\nVer 1.0.2 - Beta")
-        
-        st.markdown("""
-        <div style="background-color: #e0f2fe; padding: 10px; border-radius: 6px; margin-top: 20px;">
-            <small style="color: #0369a1;"><b>Tips:</b> Gunakan citra MRI dengan kontras tinggi untuk hasil terbaik.</small>
-        </div>
-        """, unsafe_allow_html=True)
-
+        page = st.radio("", ["NeuroScan System", "Developer Profile"], label_visibility="collapsed")
+    
     if page == "NeuroScan System":
         show_system()
     else:
