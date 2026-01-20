@@ -1,4 +1,16 @@
-import streamlit as st
+/* File Uploader Styling */
+    .stFileUploader > label {
+        color: #e2e8f0 !important;
+        font-weight: 600 !important;
+        font-size: 0.95rem !important;
+    }
+    
+    .stFileUploader section {
+        border-radius: 12px !important;
+        border: 2px dashed #475569 !important;
+        background-color: rgba(51, 65, 85, 0.3) !important;
+        padding: 1.5rem !important;
+    import streamlit as st
 import tensorflow as tf
 import numpy as np
 from PIL import Image, ImageOps
@@ -14,17 +26,17 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# --- 2. MODERN CSS WITH DARK THEME UPDATES ---
+# --- 2. MODERN CSS WITH GLASSMORPHISM & ANIMATIONS ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
     
     html, body, [class*="css"] {
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
     }
 
-    /* Glassmorphism Cards (Global) */
+    /* Glassmorphism Cards */
     .glass-card {
         background: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(10px);
@@ -90,7 +102,7 @@ st.markdown("""
         }
     }
 
-    /* Social Links */
+    /* Social Links with Icons */
     .social-link {
         display: inline-flex;
         align-items: center;
@@ -112,7 +124,7 @@ st.markdown("""
         color: #667eea;
     }
 
-    /* Profile Image */
+    /* Profile Image with Glow */
     .profile-container {
         position: relative;
         border-radius: 24px;
@@ -126,33 +138,39 @@ st.markdown("""
         50% { transform: translateY(-20px); }
     }
 
-    /* --- UPDATE: STATS CARD (DARK MODE) --- */
+    /* Stats Card */
     .stat-card {
-        background: rgba(15, 23, 42, 0.85); /* Ubah ke Gelap */
+        background: linear-gradient(135deg, rgba(51, 65, 85, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%);
         padding: 1.5rem;
         border-radius: 16px;
         text-align: center;
-        border: 1px solid rgba(255,255,255,0.2); /* Border putih tipis */
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        border: 1px solid rgba(148, 163, 184, 0.3);
         transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
 
     .stat-card:hover {
         transform: scale(1.05);
-        background: rgba(30, 41, 59, 0.95);
-        border-color: rgba(255,255,255,0.4);
+        background: linear-gradient(135deg, rgba(71, 85, 105, 0.95) 0%, rgba(51, 65, 85, 0.9) 100%);
+        border-color: rgba(148, 163, 184, 0.5);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
     }
 
     .stat-number {
         font-size: 2.5rem;
         font-weight: 900;
-        /* Gradient text tetap dipertahankan agar kontras */
-        background: linear-gradient(135deg, #a5b4fc 0%, #e0e7ff 100%); 
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
+    
+    .stat-label {
+        color: #cbd5e1;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
 
-    /* Result Card */
+    /* Result Card Animation */
     .result-card {
         animation: slideIn 0.5s ease forwards;
         padding: 2rem;
@@ -161,11 +179,17 @@ st.markdown("""
     }
 
     @keyframes slideIn {
-        from { opacity: 0; transform: translateX(30px); }
-        to { opacity: 1; transform: translateX(0); }
+        from {
+            opacity: 0;
+            transform: translateX(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
     }
 
-    /* Button Override */
+    /* Modern Button Override */
     div.stButton > button {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
@@ -190,30 +214,77 @@ st.markdown("""
         border: 2px solid #e2e8f0;
         padding: 0.75rem;
         transition: all 0.3s ease;
+        background-color: white !important;
+        color: #1e293b !important;
+    }
+    
+    .stTextInput > div > div > input::placeholder {
+        color: #94a3b8 !important;
+        opacity: 1 !important;
     }
 
     .stTextInput > div > div > input:focus {
         border-color: #667eea;
         box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-    }
-
-    /* --- UPDATE: SIDEBAR STYLING (DARK MODE) --- */
-    [data-testid="stSidebar"] {
-        background: #0f172a; /* Warna Background Gelap */
-        border-right: 1px solid rgba(255,255,255,0.1);
+        background-color: white !important;
     }
     
-    /* Memaksa teks di sidebar menjadi putih/terang */
-    [data-testid="stSidebar"] p, 
-    [data-testid="stSidebar"] span, 
-    [data-testid="stSidebar"] div,
-    [data-testid="stSidebar"] label {
+    /* Label Styling */
+    .stTextInput > label {
         color: #e2e8f0 !important;
+        font-weight: 600 !important;
+        font-size: 0.95rem !important;
+        margin-bottom: 0.5rem !important;
     }
 
+    /* Sidebar Styling */
+    [data-testid="stSidebar"] {
+        background: linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
+        backdrop-filter: blur(10px);
+    }
+
+    /* Hide Streamlit Branding */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
+    header {visibility: hidden;}
     
+    /* Hide white containers and decorations */
+    .stApp > header {
+        background-color: transparent !important;
+    }
+    
+    .stApp [data-testid="stToolbar"] {
+        display: none !important;
+    }
+    
+    .stApp [data-testid="stDecoration"] {
+        display: none !important;
+    }
+    
+    .stApp [data-testid="stStatusWidget"] {
+        display: none !important;
+    }
+    
+    /* Remove padding blocks */
+    .block-container {
+        padding-top: 2rem !important;
+    }
+    
+    /* Fix input field container backgrounds */
+    .stTextInput [data-baseweb="base-input"] {
+        background-color: transparent !important;
+    }
+    
+    .stTextInput > div > div {
+        background-color: transparent !important;
+    }
+    
+    /* File uploader background fix */
+    .stFileUploader [data-testid="stFileUploadDropzone"] {
+        background-color: transparent !important;
+    }
+    
+    /* Section Headers */
     .section-header {
         font-size: 1.75rem;
         font-weight: 800;
@@ -292,11 +363,11 @@ with st.sidebar:
     st.markdown("""
     <div style="text-align: center; padding: 1rem 0;">
         <div style="font-size: 3rem; margin-bottom: 0.5rem;">🧠</div>
-        <h2 style="margin: 0; background: linear-gradient(135deg, #a5b4fc 0%, #e0e7ff 100%); 
-                    -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900;">
+        <h2 style="margin: 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                   -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900;">
             NeuroScan AI
         </h2>
-        <p style="color: #94a3b8; font-size: 0.875rem; margin-top: 0.5rem;">
+        <p style="color: #64748b; font-size: 0.875rem; margin-top: 0.5rem;">
             Clinical Decision Support System
         </p>
     </div>
@@ -313,8 +384,8 @@ with st.sidebar:
     st.markdown("---")
     
     st.markdown("""
-    <div style="padding: 1rem; background: rgba(30, 41, 59, 0.5); border-radius: 12px; margin-top: 1rem; border: 1px solid rgba(255,255,255,0.1);">
-        <p style="font-size: 0.75rem; color: #cbd5e1; margin: 0; text-align: center;">
+    <div style="padding: 1rem; background: rgba(102, 126, 234, 0.1); border-radius: 12px; margin-top: 1rem;">
+        <p style="font-size: 0.75rem; color: #64748b; margin: 0; text-align: center;">
             <strong>Developer:</strong> Rahmat Ardiansyah<br>
             <strong>NIM:</strong> 220405010<br>
             <strong>Institution:</strong> UMRI
@@ -343,21 +414,21 @@ if menu == "🏠 Portfolio":
             """, unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
         
-        # Stats Cards (Sekarang sudah gelap sesuai CSS .stat-card)
+        # Stats Cards
         st.markdown("<br>", unsafe_allow_html=True)
         stat_col1, stat_col2 = st.columns(2)
         with stat_col1:
             st.markdown("""
             <div class="stat-card">
                 <div class="stat-number">4</div>
-                <div style="color: #e2e8f0; font-weight: 600;">Classes</div>
+                <div class="stat-label">Classes</div>
             </div>
             """, unsafe_allow_html=True)
         with stat_col2:
             st.markdown("""
             <div class="stat-card">
                 <div class="stat-number">95%</div>
-                <div style="color: #e2e8f0; font-weight: 600;">Accuracy</div>
+                <div class="stat-label">Accuracy</div>
             </div>
             """, unsafe_allow_html=True)
 
@@ -378,36 +449,44 @@ if menu == "🏠 Portfolio":
         
         st.markdown("<br>", unsafe_allow_html=True)
         
-        # Info Grid (Diupdate menjadi warna GELAP)
+        # Info Grid
         info_col1, info_col2, info_col3 = st.columns(3)
-        
-        # Style Box Gelap Reusable
-        dark_box_style = "padding: 1rem; background: rgba(15, 23, 42, 0.85); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1);"
-        
         with info_col1:
-            st.markdown(f"""
-            <div style="{dark_box_style}">
+            st.markdown("""
+            <div style="padding: 1.5rem; background: linear-gradient(135deg, rgba(51, 65, 85, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%); 
+                        border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); 
+                        border: 1px solid rgba(148, 163, 184, 0.3); transition: all 0.3s ease;"
+                 onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 20px rgba(102, 126, 234, 0.4)';"
+                 onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.3)';">
                 <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">📍</div>
-                <div style="font-weight: 700; color: #ffffff;">Pekanbaru</div>
-                <div style="color: #cbd5e1; font-size: 0.875rem;">Riau, Indonesia</div>
+                <div style="font-weight: 700; color: #e2e8f0;">Pekanbaru</div>
+                <div style="color: #94a3b8; font-size: 0.875rem;">Riau, Indonesia</div>
             </div>
             """, unsafe_allow_html=True)
         
         with info_col2:
-            st.markdown(f"""
-            <div style="{dark_box_style}">
+            st.markdown("""
+            <div style="padding: 1.5rem; background: linear-gradient(135deg, rgba(51, 65, 85, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%); 
+                        border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); 
+                        border: 1px solid rgba(148, 163, 184, 0.3); transition: all 0.3s ease;"
+                 onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 20px rgba(102, 126, 234, 0.4)';"
+                 onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.3)';">
                 <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🎓</div>
-                <div style="font-weight: 700; color: #ffffff;">UMRI</div>
-                <div style="color: #cbd5e1; font-size: 0.875rem;">Angkatan 2022</div>
+                <div style="font-weight: 700; color: #e2e8f0;">UMRI</div>
+                <div style="color: #94a3b8; font-size: 0.875rem;">Angkatan 2022</div>
             </div>
             """, unsafe_allow_html=True)
         
         with info_col3:
-            st.markdown(f"""
-            <div style="{dark_box_style}">
+            st.markdown("""
+            <div style="padding: 1.5rem; background: linear-gradient(135deg, rgba(51, 65, 85, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%); 
+                        border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); 
+                        border: 1px solid rgba(148, 163, 184, 0.3); transition: all 0.3s ease;"
+                 onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 20px rgba(102, 126, 234, 0.4)';"
+                 onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.3)';">
                 <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">💼</div>
-                <div style="font-weight: 700; color: #ffffff;">220405010</div>
-                <div style="color: #cbd5e1; font-size: 0.875rem;">NIM</div>
+                <div style="font-weight: 700; color: #e2e8f0;">220405010</div>
+                <div style="color: #94a3b8; font-size: 0.875rem;">NIM</div>
             </div>
             """, unsafe_allow_html=True)
 
@@ -471,7 +550,6 @@ elif menu == "🔬 AI Dashboard":
     
     with c_left:
         st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-        # HEADER INPUT DATA DIHAPUS (Sesuai Permintaan)
         
         p_name = st.text_input("Nama Lengkap Pasien", placeholder="contoh: Dr. Budi Santoso")
         uploaded_file = st.file_uploader(
@@ -732,13 +810,53 @@ elif menu == "📊 About Project":
             <p style="color: #64748b; font-size: 0.875rem;">Angkatan 2022</p>
         </div>
         """, unsafe_allow_html=True)
-
+    
     with col_dev3:
         st.markdown("""
         <div class="glass-card" style="text-align: center;">
-            <div style="font-size: 2.5rem; margin-bottom: 1rem;">📧</div>
-            <h4>Contact</h4>
-            <p style="font-weight: 700; color: #667eea;">rahmat@student.umri.ac.id</p>
+            <div style="font-size: 2.5rem; margin-bottom: 1rem;">🏛️</div>
+            <h4>Institusi</h4>
+            <p style="font-weight: 700; color: #667eea;">UMRI</p>
             <p style="color: #64748b; font-size: 0.875rem;">Pekanbaru, Riau</p>
         </div>
         """, unsafe_allow_html=True)
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # Features & Capabilities
+    st.markdown('<div class="glass-card">', unsafe_allow_html=True)
+    st.markdown("### ✨ Fitur & Kemampuan")
+    
+    feat_col1, feat_col2 = st.columns(2)
+    
+    with feat_col1:
+        st.markdown("""
+        - ✅ **Dual Interface:** Portfolio profesional & AI Dashboard
+        - ✅ **Auto Preprocessing:** Resize, normalisasi, dan konversi RGB otomatis
+        - ✅ **Real-time Analysis:** Prediksi instant dengan confidence score
+        - ✅ **Interactive Visualization:** Bar chart dan detail probabilitas
+        """)
+    
+    with feat_col2:
+        st.markdown("""
+        - ✅ **PDF Report Generation:** Laporan medis profesional untuk dokumentasi
+        - ✅ **Modern UI/UX:** Glassmorphism design dengan smooth animations
+        - ✅ **Responsive Layout:** Optimized untuk desktop dan mobile
+        - ✅ **Cloud Deployment:** Akses dari mana saja via Streamlit Cloud
+        """)
+    
+    st.markdown('</div>', unsafe_allow_html=True)
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # Disclaimer
+    st.warning("""
+    **⚠️ Medical Disclaimer:**
+    
+    NeuroScan AI adalah alat bantu pendukung keputusan klinis (Clinical Decision Support System) 
+    yang dikembangkan untuk tujuan penelitian dan edukasi. Hasil diagnosis dari sistem ini 
+    **HARUS** dikonfirmasi oleh tenaga medis profesional (radiolog, neurolog, atau dokter spesialis) 
+    sebelum digunakan untuk keputusan medis apapun.
+    
+    Sistem ini tidak menggantikan penilaian klinis dari praktisi medis yang berkualifikasi.
+    """)
