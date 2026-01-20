@@ -374,7 +374,7 @@ if menu == "🏠 Portfolio":
             </p>
             <h1 class="gradient-text">Rahmat Ardiansyah</h1>
             <p style="color: #cbd5e1; font-size: 1.25rem; line-height: 1.8; margin-top: 1rem;">
-                Aku Adalah Mahasiswa <strong>Teknik Informatika</strong> di <strong>Universitas Muhammadiyah Riau</strong> 
+                Aku adalah mahasiswa <strong>Teknik Informatika</strong> di <strong>Universitas Muhammadiyah Riau</strong> 
                 dengan passion dalam <strong>UI/UX Design</strong> dan <strong>Artificial Intelligence</strong>. 
                 Menggabungkan estetika desain dengan kecerdasan buatan untuk menciptakan solusi inovatif.
             </p>
