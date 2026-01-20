@@ -313,7 +313,7 @@ with st.sidebar:
     st.markdown("---")
     
     st.markdown("""
-    <div style="padding: 1rem; background: rgba(30, 41, 59, 0.5); border-radius: 12px; margin-top: 1rem; border: 1px solid rgba(255,255,255,0.1);">
+    <div style="padding: 1rem; background: rgba(15, 23, 42, 0.85); border-radius: 12px; margin-top: 1rem; border: 1px solid rgba(255,255,255,0.1);">
         <p style="font-size: 0.75rem; color: #cbd5e1; margin: 0; text-align: center;">
             <strong>Developer:</strong> Rahmat Ardiansyah<br>
             <strong>NIM:</strong> 220405010<br>
@@ -600,7 +600,7 @@ elif menu == "🔬 AI Dashboard":
                         st.markdown("#### 📋 Laporan Medis Digital")
                         
                         st.markdown(f"""
-                        <div style="background: white; padding: 1.5rem; border-radius: 12px; border: 2px solid #e2e8f0;">
+                        <div style="background: rgba(15, 23, 42, 0.85); padding: 1.5rem; border-radius: 12px; border: 2px solid #e2e8f0;">
                             <h4 style="margin-top: 0;">EXECUTIVE SUMMARY</h4>
                             <table style="width: 100%; border-collapse: collapse;">
                                 <tr>
