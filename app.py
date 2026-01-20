@@ -21,7 +21,7 @@ st.markdown("""
     
     html, body, [class*="css"] {
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
     }
 
     /* Glassmorphism Cards */
@@ -128,17 +128,20 @@ st.markdown("""
 
     /* Stats Card */
     .stat-card {
-        background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%);
+        background: linear-gradient(135deg, rgba(51, 65, 85, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%);
         padding: 1.5rem;
         border-radius: 16px;
         text-align: center;
-        border: 1px solid rgba(255,255,255,0.5);
+        border: 1px solid rgba(148, 163, 184, 0.3);
         transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
 
     .stat-card:hover {
         transform: scale(1.05);
-        background: white;
+        background: linear-gradient(135deg, rgba(71, 85, 105, 0.95) 0%, rgba(51, 65, 85, 0.9) 100%);
+        border-color: rgba(148, 163, 184, 0.5);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
     }
 
     .stat-number {
@@ -147,6 +150,12 @@ st.markdown("""
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
+    }
+    
+    .stat-label {
+        color: #cbd5e1;
+        font-weight: 600;
+        font-size: 0.9rem;
     }
 
     /* Result Card Animation */
@@ -347,14 +356,14 @@ if menu == "🏠 Portfolio":
             st.markdown("""
             <div class="stat-card">
                 <div class="stat-number">4</div>
-                <div style="color: #64748b; font-weight: 600;">Classes</div>
+                <div class="stat-label">Classes</div>
             </div>
             """, unsafe_allow_html=True)
         with stat_col2:
             st.markdown("""
             <div class="stat-card">
                 <div class="stat-number">95%</div>
-                <div style="color: #64748b; font-weight: 600;">Accuracy</div>
+                <div class="stat-label">Accuracy</div>
             </div>
             """, unsafe_allow_html=True)
 
