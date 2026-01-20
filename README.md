@@ -18,7 +18,7 @@
 
 ### 🌐 Live Demo
 Aplikasi ini sudah dideploy dan dapat diakses sepenuhnya (termasuk fitur AI) melalui tautan berikut:
-👉 **[Buka NeuroScan AI di Streamlit Cloud](https://neuroscan-ssamachixd.streamlit.app/)** *(Ganti URL di atas dengan link asli dari Streamlit Cloud Anda)*
+👉 **[Buka NeuroScan AI di Streamlit Cloud](https://deteksi-tumor-mri.streamlit.app/)** 
 
 ---
 
