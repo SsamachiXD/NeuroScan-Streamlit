@@ -361,8 +361,8 @@ if menu == "🏠 Portfolio":
         with stat_col2:
             st.markdown("""
             <div class="stat-card">
-                <div class="stat-number">95%</div>
-                <div class="stat-label">Accuracy</div>
+                <div class="stat-number">77.96%</div>
+                <div class="stat-label">Accuracy Model</div>
             </div>
             """, unsafe_allow_html=True)
 
