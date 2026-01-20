@@ -1,3 +1,15 @@
+# ==============================================
+# NeuroScan AI – ULTIMATE SaaS MODE
+# ==============================================
+# Features:
+# - Top navigation bar
+# - Dark / Light mode toggle
+# - Landing page
+# - Clinical dashboard layout
+# - Micro animations
+# - SaaS-style spacing & hierarchy
+# ==============================================
+
 import streamlit as st
 import tensorflow as tf
 from PIL import Image, ImageOps
@@ -9,246 +21,252 @@ import time
 import os
 import tempfile
 
-# ==========================================
-# 1. KONFIGURASI HALAMAN & FIX CSS
-# ==========================================
+# ===============================
+# STATE
+# ===============================
+if "theme" not in st.session_state:
+    st.session_state.theme = "light"
+
+# ===============================
+# PAGE CONFIG
+# ===============================
 st.set_page_config(
-    page_title="NeuroScan AI | Rahmat Ardiansyah",
+    page_title="NeuroScan AI",
     page_icon="🧠",
     layout="wide",
-    initial_sidebar_state="expanded"
 )
 
-# CSS INJECTION: MEMAKSA WARNA TEKS TETAP GELAP (ANTI-DARK MODE CONFLICT)
-st.markdown("""
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+# ===============================
+# THEME
+# ===============================
+def inject_css(theme="light"):
+    if theme == "light":
+        bg = "#f8fafc"
+        card = "rgba(255,255,255,0.9)"
+        text = "#020617"
+    else:
+        bg = "#020617"
+        card = "rgba(15,23,42,0.9)"
+        text = "#e5e7eb"
 
-    /* Global Text & Background */
-    html, body, [class*="css"], .stApp {
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        background-color: #f8fafc !important;
-        color: #1e293b !important; /* Warna teks utama gelap */
-    }
+    st.markdown(f"""
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
-    /* Memastikan teks markdown, judul, dan label berwarna gelap */
-    .stMarkdown, p, span, label, h1, h2, h3, h4 {
-        color: #1e293b !important;
-    }
+    html, body, [class*="css"] {{
+        font-family: 'Inter', sans-serif;
+        color: {text};
+    }}
 
-    /* Sidebar Styling */
-    section[data-testid="stSidebar"] {
-        background-color: #ffffff !important;
-        border-right: 1px solid #e2e8f0;
-    }
-    
-    section[data-testid="stSidebar"] .stMarkdown, 
-    section[data-testid="stSidebar"] span, 
-    section[data-testid="stSidebar"] label {
-        color: #1e293b !important;
-    }
+    .stApp {{
+        background: {bg};
+    }}
 
-    /* Card Container */
-    .metric-card {
-        background-color: white !important;
-        border: 1px solid #e2e8f0;
-        border-radius: 12px;
-        padding: 20px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        margin-bottom: 20px;
-        color: #1e293b !important;
-    }
+    .topbar {{
+        position: sticky;
+        top: 0;
+        background: linear-gradient(135deg, #4f46e5, #2563eb);
+        padding: 18px 30px;
+        border-radius: 18px;
+        margin-bottom: 25px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 20px 40px rgba(79,70,229,0.35);
+    }}
 
-    /* Button Styling */
-    div.stButton > button {
-        background-color: #0ea5e9 !important;
-        color: white !important;
-        border: none;
-        padding: 0.75rem 1.5rem;
-        font-weight: 600;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px -1px rgba(14, 165, 233, 0.4);
-    }
-    div.stButton > button:hover {
-        background-color: #0284c7 !important;
-        transform: translateY(-2px);
-    }
+    .topbar h1 {{
+        color: white;
+        font-weight: 900;
+        letter-spacing: -1px;
+        margin: 0;
+    }}
 
-    /* Form Inputs */
-    .stTextInput input {
-        color: #1e293b !important;
-        background-color: white !important;
-    }
+    .card {{
+        background: {card};
+        backdrop-filter: blur(10px);
+        border-radius: 22px;
+        padding: 28px;
+        border: 1px solid rgba(255,255,255,0.15);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+    }}
 
-    /* Hide default elements */
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    header {visibility: hidden;}
-</style>
-""", unsafe_allow_html=True)
+    .badge {{
+        display: inline-block;
+        padding: 8px 16px;
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 700;
+    }}
 
-# ==========================================
-# 2. LOGIKA BACKEND
-# ==========================================
+    .safe {{ background: #22c55e; color: white; }}
+    .danger {{ background: #ef4444; color: white; }}
 
+    .fade {{ animation: fadeIn 0.6s ease; }}
+
+    @keyframes fadeIn {{
+        from {{ opacity: 0; transform: translateY(8px); }}
+        to {{ opacity: 1; transform: translateY(0); }}
+    }}
+
+    #MainMenu, footer, header {{
+        visibility: hidden;
+    }}
+    </style>
+    """, unsafe_allow_html=True)
+
+inject_css(st.session_state.theme)
+
+# ===============================
+# MODEL
+# ===============================
 @st.cache_resource
-def load_model_ai():
-    model_path = 'VGG16_medium.h5'
-    if not os.path.exists(model_path):
+def load_model():
+    path = "VGG16_medium.h5"
+    if not os.path.exists(path):
         return None
-    try:
-        model = tf.keras.models.load_model(model_path, compile=False)
-        return model
-    except Exception as e:
-        st.error(f"Error loading model: {e}")
-        return None
+    return tf.keras.models.load_model(path, compile=False)
 
-def create_clinical_pdf(patient_name, diagnosis, confidence, img_obj):
-    pdf = FPDF()
-    pdf.add_page()
-    
-    # Header Laporan
-    pdf.set_fill_color(240, 249, 255)
-    pdf.rect(0, 0, 210, 40, 'F')
-    pdf.set_y(10)
-    pdf.set_font("Arial", 'B', 24)
-    pdf.set_text_color(15, 23, 42)
-    pdf.cell(0, 10, txt="NeuroScan AI", ln=True, align='C')
-    
-    pdf.set_font("Arial", size=10)
-    pdf.set_text_color(100, 116, 139)
-    pdf.cell(0, 8, txt="Laporan Analisis Radiologi Digital", ln=True, align='C')
-    pdf.ln(20)
-    
-    # Data Pasien
-    pdf.set_font("Arial", 'B', 11)
-    pdf.set_text_color(15, 23, 42)
-    pdf.cell(0, 10, txt="DATA PASIEN", ln=True)
-    pdf.set_font("Arial", size=11)
-    pdf.cell(50, 10, txt="Nama Pasien", border='B')
-    pdf.cell(0, 10, txt=f": {patient_name}", border='B', ln=True)
-    pdf.cell(50, 10, txt="Waktu Scan", border='B')
-    pdf.cell(0, 10, txt=f": {time.strftime('%d-%m-%Y %H:%M WIB')}", border='B', ln=True)
-    pdf.ln(10)
-    
-    # Preview Citra di PDF
-    try:
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".jpg") as tmp:
-            img = Image.open(img_obj).convert('RGB')
-            img.save(tmp.name)
-            pdf.image(tmp.name, x=75, w=60)
-            pdf.ln(5)
-    except:
-        pdf.cell(0, 10, txt="[Gambar MRI]", ln=True, align='C')
-
-    # Hasil
-    pdf.set_font("Arial", 'B', 14)
-    color = (34, 197, 94) if diagnosis == "No Tumor" else (239, 68, 68)
-    pdf.set_text_color(*color)
-    pdf.cell(0, 15, txt=f"DIAGNOSIS: {diagnosis.upper()}", ln=True, border=1, align='C')
-    
-    pdf.set_text_color(0, 0, 0)
-    pdf.set_font("Arial", size=11)
-    pdf.ln(5)
-    pdf.cell(0, 8, txt=f"Tingkat Kepercayaan: {confidence:.2f}%", ln=True)
-    
-    pdf.set_y(-30)
-    pdf.set_font("Arial", 'I', 8)
-    pdf.set_text_color(148, 163, 184)
-    pdf.multi_cell(0, 5, txt="Penafian: Hasil AI adalah pendukung keputusan, bukan diagnosis medis final.")
-    
-    return pdf.output(dest='S').encode('latin-1')
-
-model = load_model_ai()
+model = load_model()
 class_names = ['Glioma Tumor', 'Meningioma Tumor', 'No Tumor', 'Pituitary Tumor']
 
-# ==========================================
-# 3. KOMPONEN UI
-# ==========================================
+# ===============================
+# PDF
+# ===============================
+def create_pdf(patient_name, diagnosis, confidence, img_obj):
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Arial", 'B', 20)
+    pdf.cell(0, 10, "NeuroScan AI Report", ln=True, align="C")
+    pdf.ln(10)
+    pdf.set_font("Arial", size=12)
+    pdf.cell(0, 8, f"Patient: {patient_name}", ln=True)
+    pdf.cell(0, 8, f"Diagnosis: {diagnosis}", ln=True)
+    pdf.cell(0, 8, f"Confidence: {confidence:.2f}%", ln=True)
+    pdf.cell(0, 8, f"Date: {time.strftime('%d-%m-%Y %H:%M')} ", ln=True)
+    pdf.ln(10)
+    try:
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".jpg") as tmp:
+            img = Image.open(img_obj).convert("RGB")
+            img.save(tmp.name)
+            pdf.image(tmp.name, x=60, w=90)
+    except:
+        pass
+    pdf.ln(10)
+    pdf.set_font("Arial", 'I', 9)
+    pdf.multi_cell(0, 5, "DISCLAIMER: This AI system is a clinical decision support tool, not a medical diagnosis.")
+    return pdf.output(dest='S').encode('latin-1')
 
-def show_portfolio():
-    st.markdown("## 👨‍💻 Developer Profile")
-    col1, col2 = st.columns([1, 3], gap="medium")
+# ===============================
+# TOP BAR
+# ===============================
+def topbar():
+    col1, col2 = st.columns([4,1])
     with col1:
-        st.image("https://cdn-icons-png.flaticon.com/512/3135/3135715.png", width=180)
+        st.markdown("<div class='topbar'><h1>NeuroScan AI</h1></div>", unsafe_allow_html=True)
     with col2:
-        st.markdown(f"""
-        <div class="metric-card">
-            <h4>Rahmat Ardiansyah</h4>
-            <p>Mahasiswa Teknik Informatika <b>Universitas Muhammadiyah Riau (UMRI)</b>.</p>
-            <hr>
-            <p>NIM: 220405010<br>Minat: Deep Learning & UI/UX Design</p>
-        </div>
-        """, unsafe_allow_html=True)
+        toggle = st.button("🌙" if st.session_state.theme == "light" else "☀️")
+        if toggle:
+            st.session_state.theme = "dark" if st.session_state.theme == "light" else "light"
+            st.rerun()
 
-def show_system():
-    st.markdown("<h1>NeuroScan AI System</h1>", unsafe_allow_html=True)
-    
+# ===============================
+# PAGES
+# ===============================
+def landing_page():
+    topbar()
+    st.markdown("<div class='card fade'>", unsafe_allow_html=True)
+    st.markdown("## Clinical-grade AI for Brain Tumor Detection")
+    st.markdown("NeuroScan AI is a deep learning powered decision support system for radiology.")
+    st.markdown("</div>", unsafe_allow_html=True)
+
+
+def system_page():
+    topbar()
+
     if model is None:
-        st.error("Model tidak ditemukan.")
+        st.error("Model not found.")
         return
 
-    col_ctrl, col_res = st.columns([1, 1.5], gap="large")
+    left, right = st.columns([1, 1.4], gap="large")
 
-    with col_ctrl:
-        st.subheader("1. Input Data")
-        with st.container(border=True):
-            name = st.text_input("Nama Pasien", placeholder="Nama lengkap...")
-            file = st.file_uploader("Upload MRI", type=["jpg", "png", "jpeg"])
-            btn = st.button("🔍 ANALISIS SEKARANG", type="primary", use_container_width=True)
+    with left:
+        st.markdown("<div class='card fade'>", unsafe_allow_html=True)
+        st.markdown("### Patient Input")
+        name = st.text_input("Patient Name")
+        file = st.file_uploader("Upload MRI Image", type=["jpg", "png", "jpeg"])
+        run = st.button("Run AI Diagnosis", use_container_width=True)
+        st.markdown("</div>", unsafe_allow_html=True)
 
-    with col_res:
-        st.subheader("2. Hasil Analisis")
+    with right:
+        st.markdown("<div class='card fade'>", unsafe_allow_html=True)
+        st.markdown("### AI Output")
+
         if file:
             img = Image.open(file).convert('RGB')
-            st.image(img, caption="Citra Input", use_container_width=True)
-            
-            if btn:
+            st.image(img, use_container_width=True)
+
+            if run:
                 if not name:
-                    st.warning("Isi nama pasien.")
+                    st.warning("Enter patient name")
                 else:
-                    with st.spinner('Menganalisis...'):
-                        # Resize 150x150 sesuai training data
-                        proc_img = ImageOps.fit(img, (150, 150), Image.Resampling.LANCZOS)
-                        arr = np.asarray(proc_img) / 255.0
+                    with st.spinner("Analyzing MRI..."):
+                        time.sleep(1)
+                        img_resized = ImageOps.fit(img, (150,150))
+                        arr = np.asarray(img_resized) / 255.0
                         arr = np.expand_dims(arr, axis=0)
-                        
+
                         pred = model.predict(arr)
                         score = tf.nn.softmax(pred[0])
                         idx = np.argmax(score)
-                        
-                        diag = class_names[idx]
-                        conf = 100 * np.max(score)
-                        
-                        color = "#22c55e" if diag == "No Tumor" else "#ef4444"
-                        st.markdown(f"""
-                        <div style="background-color:{color}; padding:20px; border-radius:10px; color:white; text-align:center;">
-                            <h2 style="color:white !important;">{diag}</h2>
-                            <p style="color:white !important;">Confidence Score: {conf:.2f}%</p>
-                        </div>
-                        """, unsafe_allow_html=True)
-                        
-                        st.bar_chart(pd.DataFrame(pred[0]*100, index=class_names, columns=["%"]))
-                        
-                        pdf = create_clinical_pdf(name, diag, conf, file)
-                        b64 = base64.b64encode(pdf).decode('utf-8')
-                        st.markdown(f'<a href="data:application/octet-stream;base64,{b64}" download="Laporan_{name}.pdf"><button style="width:100%; padding:10px; background:#1e293b; color:white; border-radius:8px; border:none; cursor:pointer;">📄 DOWNLOAD PDF</button></a>', unsafe_allow_html=True)
+                        diagnosis = class_names[idx]
+                        confidence = 100 * np.max(score)
+
+                        status = "safe" if diagnosis == "No Tumor" else "danger"
+
+                        st.markdown(f"<span class='badge {status}'>{diagnosis}</span>", unsafe_allow_html=True)
+                        st.markdown(f"## {confidence:.2f}% Confidence")
+
+                        df = pd.DataFrame({"Class": class_names, "Probability": pred[0] * 100})
+                        st.bar_chart(df.set_index("Class"))
+
+                        pdf = create_pdf(name, diagnosis, confidence, file)
+                        b64 = base64.b64encode(pdf).decode()
+                        href = f'<a href="data:application/octet-stream;base64,{b64}" download="NeuroScan_{name}.pdf">Download PDF Report</a>'
+                        st.markdown(href, unsafe_allow_html=True)
         else:
-            st.info("Upload citra MRI untuk memulai.")
+            st.info("Upload MRI image to begin")
 
-# ==========================================
-# 4. ROUTER
-# ==========================================
+        st.markdown("</div>", unsafe_allow_html=True)
 
+
+def profile_page():
+    topbar()
+    st.markdown("<div class='card fade'>", unsafe_allow_html=True)
+    col1, col2 = st.columns([1,3])
+
+    with col1:
+        st.image("https://cdn-icons-png.flaticon.com/512/3135/3135715.png", width=160)
+
+    with col2:
+        st.markdown("## Rahmat Ardiansyah")
+        st.markdown("AI | Health-Tech | Computer Vision")
+        st.markdown("Informatics student focusing on medical deep learning systems.")
+
+    st.markdown("</div>", unsafe_allow_html=True)
+
+# ===============================
+# ROUTER
+# ===============================
 def main():
-    with st.sidebar:
-        st.markdown("## 🏥 Menu")
-        page = st.radio("", ["NeuroScan System", "Developer Profile"], label_visibility="collapsed")
-    
-    if page == "NeuroScan System":
-        show_system()
-    else:
-        show_portfolio()
+    page = st.sidebar.radio("Navigation", ["Landing", "System", "Developer"])
 
-if __name__ == "__main__":
+    if page == "Landing":
+        landing_page()
+    elif page == "System":
+        system_page()
+    else:
+        profile_page()
+
+if __name__ == '__main__':
     main()
