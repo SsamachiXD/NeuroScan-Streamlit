@@ -14,7 +14,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# --- 2. MODERN CSS WITH GLASSMORPHISM & ANIMATIONS ---
+# --- 2. MODERN CSS WITH DARK THEME UPDATES ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
@@ -24,7 +24,7 @@ st.markdown("""
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     }
 
-    /* Glassmorphism Cards */
+    /* Glassmorphism Cards (Global) */
     .glass-card {
         background: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(10px);
@@ -90,7 +90,7 @@ st.markdown("""
         }
     }
 
-    /* Social Links with Icons */
+    /* Social Links */
     .social-link {
         display: inline-flex;
         align-items: center;
@@ -112,7 +112,7 @@ st.markdown("""
         color: #667eea;
     }
 
-    /* Profile Image with Glow */
+    /* Profile Image */
     .profile-container {
         position: relative;
         border-radius: 24px;
@@ -126,30 +126,33 @@ st.markdown("""
         50% { transform: translateY(-20px); }
     }
 
-    /* Stats Card */
+    /* --- UPDATE: STATS CARD (DARK MODE) --- */
     .stat-card {
-        background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%);
+        background: rgba(15, 23, 42, 0.85); /* Ubah ke Gelap */
         padding: 1.5rem;
         border-radius: 16px;
         text-align: center;
-        border: 1px solid rgba(255,255,255,0.5);
+        border: 1px solid rgba(255,255,255,0.2); /* Border putih tipis */
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         transition: all 0.3s ease;
     }
 
     .stat-card:hover {
         transform: scale(1.05);
-        background: white;
+        background: rgba(30, 41, 59, 0.95);
+        border-color: rgba(255,255,255,0.4);
     }
 
     .stat-number {
         font-size: 2.5rem;
         font-weight: 900;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        /* Gradient text tetap dipertahankan agar kontras */
+        background: linear-gradient(135deg, #a5b4fc 0%, #e0e7ff 100%); 
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
 
-    /* Result Card Animation */
+    /* Result Card */
     .result-card {
         animation: slideIn 0.5s ease forwards;
         padding: 2rem;
@@ -158,17 +161,11 @@ st.markdown("""
     }
 
     @keyframes slideIn {
-        from {
-            opacity: 0;
-            transform: translateX(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateX(0);
-        }
+        from { opacity: 0; transform: translateX(30px); }
+        to { opacity: 1; transform: translateX(0); }
     }
 
-    /* Modern Button Override */
+    /* Button Override */
     div.stButton > button {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
@@ -200,17 +197,23 @@ st.markdown("""
         box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
     }
 
-    /* Sidebar Styling */
+    /* --- UPDATE: SIDEBAR STYLING (DARK MODE) --- */
     [data-testid="stSidebar"] {
-        background: linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
-        backdrop-filter: blur(10px);
+        background: #0f172a; /* Warna Background Gelap */
+        border-right: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    /* Memaksa teks di sidebar menjadi putih/terang */
+    [data-testid="stSidebar"] p, 
+    [data-testid="stSidebar"] span, 
+    [data-testid="stSidebar"] div,
+    [data-testid="stSidebar"] label {
+        color: #e2e8f0 !important;
     }
 
-    /* Hide Streamlit Branding */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     
-    /* Section Headers */
     .section-header {
         font-size: 1.75rem;
         font-weight: 800;
@@ -289,11 +292,11 @@ with st.sidebar:
     st.markdown("""
     <div style="text-align: center; padding: 1rem 0;">
         <div style="font-size: 3rem; margin-bottom: 0.5rem;">🧠</div>
-        <h2 style="margin: 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-                   -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900;">
+        <h2 style="margin: 0; background: linear-gradient(135deg, #a5b4fc 0%, #e0e7ff 100%); 
+                    -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900;">
             NeuroScan AI
         </h2>
-        <p style="color: #64748b; font-size: 0.875rem; margin-top: 0.5rem;">
+        <p style="color: #94a3b8; font-size: 0.875rem; margin-top: 0.5rem;">
             Clinical Decision Support System
         </p>
     </div>
@@ -310,8 +313,8 @@ with st.sidebar:
     st.markdown("---")
     
     st.markdown("""
-    <div style="padding: 1rem; background: rgba(102, 126, 234, 0.1); border-radius: 12px; margin-top: 1rem;">
-        <p style="font-size: 0.75rem; color: #64748b; margin: 0; text-align: center;">
+    <div style="padding: 1rem; background: rgba(30, 41, 59, 0.5); border-radius: 12px; margin-top: 1rem; border: 1px solid rgba(255,255,255,0.1);">
+        <p style="font-size: 0.75rem; color: #cbd5e1; margin: 0; text-align: center;">
             <strong>Developer:</strong> Rahmat Ardiansyah<br>
             <strong>NIM:</strong> 220405010<br>
             <strong>Institution:</strong> UMRI
@@ -340,21 +343,21 @@ if menu == "🏠 Portfolio":
             """, unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
         
-        # Stats Cards
+        # Stats Cards (Sekarang sudah gelap sesuai CSS .stat-card)
         st.markdown("<br>", unsafe_allow_html=True)
         stat_col1, stat_col2 = st.columns(2)
         with stat_col1:
             st.markdown("""
             <div class="stat-card">
                 <div class="stat-number">4</div>
-                <div style="color: #64748b; font-weight: 600;">Classes</div>
+                <div style="color: #e2e8f0; font-weight: 600;">Classes</div>
             </div>
             """, unsafe_allow_html=True)
         with stat_col2:
             st.markdown("""
             <div class="stat-card">
                 <div class="stat-number">95%</div>
-                <div style="color: #64748b; font-weight: 600;">Accuracy</div>
+                <div style="color: #e2e8f0; font-weight: 600;">Accuracy</div>
             </div>
             """, unsafe_allow_html=True)
 
@@ -375,32 +378,36 @@ if menu == "🏠 Portfolio":
         
         st.markdown("<br>", unsafe_allow_html=True)
         
-        # Info Grid
+        # Info Grid (Diupdate menjadi warna GELAP)
         info_col1, info_col2, info_col3 = st.columns(3)
+        
+        # Style Box Gelap Reusable
+        dark_box_style = "padding: 1rem; background: rgba(15, 23, 42, 0.85); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1);"
+        
         with info_col1:
-            st.markdown("""
-            <div style="padding: 1rem; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            st.markdown(f"""
+            <div style="{dark_box_style}">
                 <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">📍</div>
-                <div style="font-weight: 700; color: #1e293b;">Pekanbaru</div>
-                <div style="color: #64748b; font-size: 0.875rem;">Riau, Indonesia</div>
+                <div style="font-weight: 700; color: #ffffff;">Pekanbaru</div>
+                <div style="color: #cbd5e1; font-size: 0.875rem;">Riau, Indonesia</div>
             </div>
             """, unsafe_allow_html=True)
         
         with info_col2:
-            st.markdown("""
-            <div style="padding: 1rem; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            st.markdown(f"""
+            <div style="{dark_box_style}">
                 <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🎓</div>
-                <div style="font-weight: 700; color: #1e293b;">UMRI</div>
-                <div style="color: #64748b; font-size: 0.875rem;">Angkatan 2022</div>
+                <div style="font-weight: 700; color: #ffffff;">UMRI</div>
+                <div style="color: #cbd5e1; font-size: 0.875rem;">Angkatan 2022</div>
             </div>
             """, unsafe_allow_html=True)
         
         with info_col3:
-            st.markdown("""
-            <div style="padding: 1rem; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            st.markdown(f"""
+            <div style="{dark_box_style}">
                 <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">💼</div>
-                <div style="font-weight: 700; color: #1e293b;">220405010</div>
-                <div style="color: #64748b; font-size: 0.875rem;">NIM</div>
+                <div style="font-weight: 700; color: #ffffff;">220405010</div>
+                <div style="color: #cbd5e1; font-size: 0.875rem;">NIM</div>
             </div>
             """, unsafe_allow_html=True)
 
@@ -408,10 +415,10 @@ if menu == "🏠 Portfolio":
         st.markdown('<div class="section-header">🛠 Tech Stack & Expertise</div>', unsafe_allow_html=True)
         
         tech_stack = {
-            "Languages": ["Python", "JavaScript", "C++", "HTML/CSS"],
+            "Languages": ["Python", "JavaScript", "C++"],
             "AI/ML": ["TensorFlow", "PyTorch", "Scikit-learn"],
             "Web Dev": ["Streamlit", "React", "Tailwind CSS"],
-            "Design": ["Figma", "Canva"]
+            "Design": ["Figma", "Adobe XD", "Framer"]
         }
         
         for category, techs in tech_stack.items():
@@ -464,7 +471,7 @@ elif menu == "🔬 AI Dashboard":
     
     with c_left:
         st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-        st.markdown("### 📋 Input Data Pasien")
+        # HEADER INPUT DATA DIHAPUS (Sesuai Permintaan)
         
         p_name = st.text_input("Nama Lengkap Pasien", placeholder="contoh: Dr. Budi Santoso")
         uploaded_file = st.file_uploader(
@@ -725,53 +732,13 @@ elif menu == "📊 About Project":
             <p style="color: #64748b; font-size: 0.875rem;">Angkatan 2022</p>
         </div>
         """, unsafe_allow_html=True)
-    
+
     with col_dev3:
         st.markdown("""
         <div class="glass-card" style="text-align: center;">
-            <div style="font-size: 2.5rem; margin-bottom: 1rem;">🏛️</div>
-            <h4>Institusi</h4>
-            <p style="font-weight: 700; color: #667eea;">UMRI</p>
+            <div style="font-size: 2.5rem; margin-bottom: 1rem;">📧</div>
+            <h4>Contact</h4>
+            <p style="font-weight: 700; color: #667eea;">rahmat@student.umri.ac.id</p>
             <p style="color: #64748b; font-size: 0.875rem;">Pekanbaru, Riau</p>
         </div>
         """, unsafe_allow_html=True)
-    
-    st.markdown("<br>", unsafe_allow_html=True)
-    
-    # Features & Capabilities
-    st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-    st.markdown("### ✨ Fitur & Kemampuan")
-    
-    feat_col1, feat_col2 = st.columns(2)
-    
-    with feat_col1:
-        st.markdown("""
-        - ✅ **Dual Interface:** Portfolio profesional & AI Dashboard
-        - ✅ **Auto Preprocessing:** Resize, normalisasi, dan konversi RGB otomatis
-        - ✅ **Real-time Analysis:** Prediksi instant dengan confidence score
-        - ✅ **Interactive Visualization:** Bar chart dan detail probabilitas
-        """)
-    
-    with feat_col2:
-        st.markdown("""
-        - ✅ **PDF Report Generation:** Laporan medis profesional untuk dokumentasi
-        - ✅ **Modern UI/UX:** Glassmorphism design dengan smooth animations
-        - ✅ **Responsive Layout:** Optimized untuk desktop dan mobile
-        - ✅ **Cloud Deployment:** Akses dari mana saja via Streamlit Cloud
-        """)
-    
-    st.markdown('</div>', unsafe_allow_html=True)
-    
-    st.markdown("<br>", unsafe_allow_html=True)
-    
-    # Disclaimer
-    st.warning("""
-    **⚠️ Medical Disclaimer:**
-    
-    NeuroScan AI adalah alat bantu pendukung keputusan klinis (Clinical Decision Support System) 
-    yang dikembangkan untuk tujuan penelitian dan edukasi. Hasil diagnosis dari sistem ini 
-    **HARUS** dikonfirmasi oleh tenaga medis profesional (radiolog, neurolog, atau dokter spesialis) 
-    sebelum digunakan untuk keputusan medis apapun.
-    
-    Sistem ini tidak menggantikan penilaian klinis dari praktisi medis yang berkualifikasi.
-    """)
