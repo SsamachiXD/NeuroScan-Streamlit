@@ -1,31 +1,39 @@
-# 🧠 NeuroScan: AI Brain Tumor Detection
+# 🧠 NeuroScan AI: Clinical Decision Support System
 
-![NeuroScan Dashboard](https://img.shields.io/badge/Status-Active-success)
-![Python](https://img.shields.io/badge/Python-3.9%2B-blue)
-![TensorFlow](https://img.shields.io/badge/Framework-TensorFlow-orange)
+![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white)
+![TensorFlow](https://img.shields.io/badge/TensorFlow-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 
-**NeuroScan** adalah sistem cerdas pendukung keputusan klinis berbasis Deep Learning (VGG16) yang dirancang untuk mendeteksi dan mengklasifikasikan tumor otak dari citra MRI.
-
-### 🚀 Fitur Utama
-* **Deteksi 4 Kelas:** Glioma, Meningioma, Pituitary, dan No Tumor.
-* **Generate Laporan PDF:** Hasil diagnosis dapat langsung diunduh dalam format PDF resmi.
-* **Dashboard Interaktif:** Antarmuka web modern & responsif untuk upload data pasien.
+**NeuroScan AI** adalah aplikasi berbasis web yang mengintegrasikan Deep Learning (arsitektur VGG16) untuk membantu tenaga medis dalam mendeteksi dan mengklasifikasikan jenis tumor otak melalui citra MRI. Aplikasi ini memisahkan antara profil profesional pengembang dan sistem diagnosis klinis untuk pengalaman pengguna yang lebih terstruktur.
 
 ---
 
-### 🌐 Live Demo (Frontend Only)
-Anda dapat melihat tampilan antarmuka aplikasi di sini:
-👉 **[Lihat Portfolio NeuroScan](https://SsamachiXD.github.io/NeuroScan_Tumor-Otak-MRI/)**
-
-> **Catatan:** Fitur diagnosis AI *tidak berjalan* pada versi web demo di atas karena membutuhkan backend Python. Untuk mencoba AI, silakan instalasi secara lokal (Localhost) mengikuti panduan di bawah.
+### 🌟 Fitur Unggulan
+* **Analisis Citra MRI:** Mengklasifikasikan 4 kondisi: *Glioma*, *Meningioma*, *Pituitary*, dan *No Tumor*.
+* **Arsitektur VGG16:** Menggunakan model Convolutional Neural Network (CNN) yang telah dioptimasi untuk akurasi tinggi pada citra medis.
+* **Laporan Klinis PDF:** Menghasilkan laporan otomatis yang berisi data pasien, hasil diagnosis, dan tingkat kepercayaan AI (Confidence Score).
+* **Dual Interface:** Navigasi yang memisahkan antara Dashboard AI dan Portofolio Developer.
 
 ---
 
-### 💻 Cara Menjalankan (Localhost)
+### 🌐 Live Demo
+Aplikasi ini sudah dideploy dan dapat diakses sepenuhnya (termasuk fitur AI) melalui tautan berikut:
+👉 **[Buka NeuroScan AI di Streamlit Cloud](https://neuroscan-ssamachixd.streamlit.app/)** *(Ganti URL di atas dengan link asli dari Streamlit Cloud Anda)*
 
-Ikuti langkah ini untuk menjalankan sistem penuh di komputer Anda:
+---
 
-**1. Clone Repository**
-```bash
-git clone [https://github.com/SsamachiXD/NeuroScan_Tumor-Otak-MRI.git](https://github.com/SsamachiXD/NeuroScan_Tumor-Otak-MRI.git)
-cd NeuroScan_Tumor-Otak-MRI
+### 📂 Struktur Proyek
+- `app.py`: File utama aplikasi (Streamlit UI & Logic).
+- `requirements.txt`: Daftar pustaka (library) yang dibutuhkan oleh server.
+- `VGG16_medium.h5`: Model Deep Learning yang telah dilatih (Pre-trained model).
+
+---
+
+### 💻 Cara Instalasi Lokal (Development)
+
+Jika ingin menjalankan aplikasi ini di komputer sendiri:
+
+1. **Clone Repository**
+   ```bash
+   git clone [https://github.com/SsamachiXD/NeuroScan-Streamlit.git](https://github.com/SsamachiXD/NeuroScan-Streamlit.git)
+   cd NeuroScan-Streamlit
