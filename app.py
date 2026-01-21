@@ -361,7 +361,7 @@ if menu == "🏠 Portfolio":
         with stat_col2:
             st.markdown("""
             <div class="stat-card">
-                <div class="stat-number">77.96%</div>
+                <div class="stat-number">77%</div>
                 <div class="stat-label">Accuracy Model</div>
             </div>
             """, unsafe_allow_html=True)
@@ -416,10 +416,10 @@ if menu == "🏠 Portfolio":
         st.markdown('<div class="section-header">🛠 Tech Stack & Expertise</div>', unsafe_allow_html=True)
         
         tech_stack = {
-            "Languages": ["Python", "JavaScript", "C++"],
+            "Languages": ["Python", "JavaScript", "C++", "HTML/CSS"],
             "AI/ML": ["TensorFlow", "PyTorch", "Scikit-learn"],
-            "Web Dev": ["Streamlit", "React", "Tailwind CSS"],
-            "Design": ["Figma", "Adobe XD", "Framer"]
+            "Web Dev": ["Streamlit", "React", "Tailwind CSS", "Laravel"],
+            "Design": ["Figma", "Canva"]
         }
         
         for category, techs in tech_stack.items():
@@ -741,7 +741,7 @@ elif menu == "📊 About Project":
         <div class="info-box-dark">
             <div style="font-size: 2.5rem; margin-bottom: 1rem;">📧</div>
             <h4>Contact</h4>
-            <p style="font-weight: 700; color: #818cf8;">rahmat@student.umri.ac.id</p>
+            <p style="font-weight: 700; color: #818cf8;">220401050@student.umri.ac.id</p>
             <p style="color: #94a3b8; font-size: 0.875rem;">Pekanbaru, Riau</p>
         </div>
         """, unsafe_allow_html=True)
