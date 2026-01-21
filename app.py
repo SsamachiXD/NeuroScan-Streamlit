@@ -462,7 +462,7 @@ elif menu == "🔬 AI Dashboard":
     <div style="text-align: center; margin-bottom: 2rem;">
         <h1 class="gradient-text" style="font-size: 3rem;">NeuroScan AI Dashboard</h1>
         <p style="color: #cbd5e1; font-size: 1.1rem; max-width: 800px; margin: 1rem auto;">
-            Sistem Pendukung Keputusan Klinis berbasis <strong>Deep Learning VGG16</strong> 
+            Sistem Klasifikasi Klinis berbasis <strong>Deep Learning VGG16</strong> 
             untuk deteksi dini tumor otak melalui analisis citra MRI.
         </p>
     </div>
