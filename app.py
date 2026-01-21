@@ -270,7 +270,7 @@ def create_pdf(patient_name, diagnosis, confidence, probabilities):
     pdf.set_font("Arial", size=12)
     pdf.cell(190, 10, txt=f"Nama Pasien: {patient_name}", ln=True)
     pdf.cell(190, 10, txt=f"Tanggal Pemeriksaan: {datetime.now().strftime('%d %B %Y, %H:%M WIB')}", ln=True)
-    pdf.cell(190, 10, txt=f"NIM Pengembang: 220405010", ln=True)
+    pdf.cell(190, 10, txt=f"NIM Pengembang: 220401050", ln=True)
     
     pdf.ln(5)
     pdf.set_fill_color(240, 253, 244) if diagnosis == 'No Tumor' else pdf.set_fill_color(254, 242, 242)
@@ -321,7 +321,7 @@ with st.sidebar:
     <div style="padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 12px; margin-top: 1rem; border: 1px solid rgba(255,255,255,0.1);">
         <p style="font-size: 0.75rem; color: #cbd5e1; margin: 0; text-align: center;">
             <strong>Developer:</strong> Rahmat Ardiansyah<br>
-            <strong>NIM:</strong> 220405010<br>
+            <strong>NIM:</strong> 220401050<br>
             <strong>Institution:</strong> UMRI
         </p>
     </div>
@@ -407,8 +407,8 @@ if menu == "🏠 Portfolio":
             st.markdown("""
             <div class="info-box-dark">
                 <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">💼</div>
-                <div style="font-weight: 700; color: #f1f5f9;">220405010</div>
-                <div style="color: #94a3b8; font-size: 0.875rem;">NIM</div>
+                <div style="font-weight: 700; color: #f1f5f9;">NIM</div>
+                <div style="color: #94a3b8; font-size: 0.875rem;">220401050</div>
             </div>
             """, unsafe_allow_html=True)
 
@@ -731,7 +731,7 @@ elif menu == "📊 About Project":
         <div class="info-box-dark">
             <div style="font-size: 2.5rem; margin-bottom: 1rem;">🎓</div>
             <h4>NIM</h4>
-            <p style="font-weight: 700; color: #818cf8;">220405010</p>
+            <p style="font-weight: 700; color: #818cf8;">220401050</p>
             <p style="color: #94a3b8; font-size: 0.875rem;">Angkatan 2022</p>
         </div>
         """, unsafe_allow_html=True)
